@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3D 建模与打印定制服务 | 小胖工作室</title>
+  <meta name="description" content="基于 20+ 年工业产品开发经验，提供快速建模、逆向建模、3D 打印验证与小批量产品化交付服务。">
+  <style>
+    :root {
+      --ink: #151515;
+      --muted: #5c6470;
+      --line: #d9dee5;
+      --paper: #f7f8f7;
+      --white: #ffffff;
+      --green: #22a06b;
+      --yellow: #ffca2f;
+      --orange: #f26a2e;
+      --steel: #2e3b46;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Arial, sans-serif;
+      line-height: 1.65;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .topbar {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px clamp(20px, 5vw, 72px);
+      color: var(--white);
+      background: linear-gradient(180deg, rgba(0, 0, 0, .62), rgba(0, 0, 0, 0));
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      color: var(--ink);
+      background: var(--yellow);
+      border: 2px solid rgba(255, 255, 255, .7);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .nav {
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+    }
+
+    .nav a {
+      opacity: .88;
+    }
+
+    .nav a:hover {
+      opacity: 1;
+    }
+
+    .hero {
+      min-height: 92vh;
+      display: grid;
+      align-items: end;
+      padding: 128px clamp(20px, 5vw, 72px) 56px;
+      color: var(--white);
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, .78) 0%, rgba(0, 0, 0, .48) 44%, rgba(0, 0, 0, .18) 100%),
+        url("assets/case-window-outdoor.jfif") center / cover no-repeat;
+    }
+
+    .hero-content {
+      width: min(780px, 100%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      color: var(--yellow);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 42px;
+      height: 3px;
+      background: var(--yellow);
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(42px, 8vw, 86px);
+      line-height: .98;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 710px;
+      margin: 24px 0 0;
+      color: rgba(255, 255, 255, .9);
+      font-size: clamp(17px, 2vw, 22px);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px;
+      border: 1px solid rgba(255, 255, 255, .5);
+      background: rgba(255, 255, 255, .08);
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    .button.primary {
+      border-color: var(--yellow);
+      background: var(--yellow);
+      color: var(--ink);
+    }
+
+    .section {
+      padding: 72px clamp(20px, 5vw, 72px);
+    }
+
+    .section.white {
+      background: var(--white);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(280px, 1fr);
+      gap: 40px;
+      align-items: end;
+      margin-bottom: 32px;
+    }
+
+    .section-kicker {
+      color: var(--orange);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    h2 {
+      margin: 8px 0 0;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .stat {
+      min-height: 132px;
+      padding: 22px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1.1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .service {
+      min-height: 280px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      border-radius: 8px;
+    }
+
+    .service-number {
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    h3 {
+      margin: 12px 0 10px;
+      font-size: 22px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .service p,
+    .case-text p,
+    .about-copy p,
+    .contact p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .case-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+      gap: 32px;
+      align-items: stretch;
+    }
+
+    .case-media {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 12px;
+      min-height: 520px;
+    }
+
+    .case-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .case-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .case-text {
+      padding: 34px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      border-radius: 8px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tag-list li {
+      padding: 7px 10px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      color: var(--steel);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .process {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .step {
+      min-height: 150px;
+      padding: 20px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .step b {
+      display: block;
+      color: var(--orange);
+      font-size: 13px;
+    }
+
+    .step span {
+      display: block;
+      margin-top: 12px;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .scope-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .scope {
+      padding: 26px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .scope.warn {
+      border-color: rgba(242, 106, 46, .42);
+      background: #fff6f1;
+    }
+
+    .scope ul {
+      margin: 16px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    .about {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 34px;
+      align-items: center;
+    }
+
+    .profile {
+      aspect-ratio: 1;
+      width: 220px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+    }
+
+    .about-copy {
+      max-width: 820px;
+    }
+
+    .contact {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, .7fr);
+      gap: 36px;
+      align-items: center;
+      color: var(--white);
+      background: var(--steel);
+    }
+
+    .contact h2 {
+      color: var(--white);
+    }
+
+    .contact p {
+      color: rgba(255, 255, 255, .78);
+      font-size: 17px;
+    }
+
+    .contact-box {
+      padding: 28px;
+      border: 1px solid rgba(255, 255, 255, .22);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .06);
+    }
+
+    .contact-line {
+      display: block;
+      margin-top: 12px;
+      color: var(--white);
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    footer {
+      padding: 24px clamp(20px, 5vw, 72px);
+      color: var(--muted);
+      background: var(--white);
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px) {
+      .nav {
+        display: none;
+      }
+
+      .section-head,
+      .case-layout,
+      .contact {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-grid,
+      .service-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .process {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        padding: 14px 18px;
+      }
+
+      .hero {
+        min-height: 88vh;
+        padding: 112px 20px 44px;
+        background:
+          linear-gradient(180deg, rgba(0, 0, 0, .76) 0%, rgba(0, 0, 0, .42) 58%, rgba(0, 0, 0, .66) 100%),
+          url("assets/case-window-outdoor.jfif") center / cover no-repeat;
+      }
+
+      .section {
+        padding: 52px 20px;
+      }
+
+      .stat-grid,
+      .service-grid,
+      .process,
+      .scope-grid,
+      .about {
+        grid-template-columns: 1fr;
+      }
+
+      .case-media {
+        min-height: auto;
+        grid-template-columns: 1fr;
+      }
+
+      .case-media img {
+        height: auto;
+        aspect-ratio: 4 / 3;
+      }
+
+      .case-text,
+      .contact-box {
+        padding: 24px;
+      }
+
+      .profile {
+        width: 160px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="返回首页">
+      <span class="brand-mark">3D</span>
+      <span>小胖工作室</span>
+    </a>
+    <nav class="nav" aria-label="页面导航">
+      <a href="#services">服务</a>
+      <a href="#case">案例</a>
+      <a href="#process">流程</a>
+      <a href="#contact">联系</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">快速建模 · 3D 打印 · 小批量交付</p>
+        <h1>3D 建模与打印定制服务</h1>
+        <p class="hero-copy">基于 20+ 年工业产品开发经验，把创意、草图、照片、旧零件或口头需求，转化为可打印、可验证、可交付的实物产品。</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#contact">咨询定制</a>
+          <a class="button" href="#case">查看案例</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section white" aria-label="能力概览">
+      <div class="stat-grid">
+        <div class="stat">
+          <strong>20+ 年</strong>
+          <span>工业产品与汽车零部件开发经验</span>
+        </div>
+        <div class="stat">
+          <strong>1 周内</strong>
+          <span>常规项目从沟通到交付的参考周期</span>
+        </div>
+        <div class="stat">
+          <strong>256³</strong>
+          <span>最大打印尺寸 256 x 256 x 260 mm</span>
+        </div>
+        <div class="stat">
+          <strong>多台设备</strong>
+          <span>拓竹 X2D、X1C、A1 等打印设备</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="services">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">SERVICES</span>
+          <h2>从想法到实物，不只停在打印</h2>
+        </div>
+        <p>适合个人创作者、小商家、工作室和小型项目团队。可做创意产品、展示道具、功能件、停产零件替代件、小批量样件和定制周边。</p>
+      </div>
+
+      <div class="service-grid">
+        <article class="service">
+          <span class="service-number">01</span>
+          <h3>快速建模</h3>
+          <p>根据草图、照片、旧零件、尺寸图或口头需求建立可打印模型。常用 Catia、SolidWorks、Blender。</p>
+        </article>
+        <article class="service">
+          <span class="service-number">02</span>
+          <h3>逆向建模</h3>
+          <p>针对停产零件、缺失配件或现有样件，重建可制造数据，并结合使用场景优化结构。</p>
+        </article>
+        <article class="service">
+          <span class="service-number">03</span>
+          <h3>原型验证</h3>
+          <p>用 3D 打印完成结构、安装、外观、尺寸和使用场景验证，让方案更快进入实物判断。</p>
+        </article>
+        <article class="service">
+          <span class="service-number">04</span>
+          <h3>小批量定制</h3>
+          <p>提供展示件、功能件、收纳件、支架、模型道具、礼品周边和文创产品的小批量制作。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section white" id="case">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">CASE</span>
+          <h2>快闪活动周边小窗道具</h2>
+        </div>
+        <p>根据线下快闪活动主题，完成小窗结构建模、3D 打印试制、5 轮迭代与上线交付。对外展示时已使用脱敏名称。</p>
+      </div>
+
+      <div class="case-layout">
+        <div class="case-media">
+          <img src="assets/case-window-outdoor.jfif" alt="小窗道具户外展示效果">
+          <div class="case-stack">
+            <img src="assets/case-window-toy.jfif" alt="小窗道具与玩偶组合展示">
+            <img src="assets/case-window-print.jfif" alt="黄色 3D 打印小窗结构件">
+          </div>
+        </div>
+        <article class="case-text">
+          <span class="section-kicker">交付内容</span>
+          <h3>从主题概念到可展示实物</h3>
+          <p>客户需要一款具备主题记忆点、可陈列、可拍照传播的小型展示道具。项目从需求理解开始，完成结构建模、打印试制、装配验证和多轮修改，最终交付可上线使用的实物。</p>
+          <ul class="tag-list" aria-label="案例标签">
+            <li>快速建模</li>
+            <li>PLA / PETG</li>
+            <li>5 轮迭代</li>
+            <li>一周内交付</li>
+            <li>展示道具</li>
+            <li>小批量样件</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="process">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">PROCESS</span>
+          <h2>清楚沟通，快速推进</h2>
+        </div>
+        <p>常规项目基本一周以内完成。具体周期会根据建模复杂度、打印数量、材料和迭代次数调整。</p>
+      </div>
+      <div class="process">
+        <div class="step">
+          <b>STEP 01</b>
+          <span>需求沟通</span>
+        </div>
+        <div class="step">
+          <b>STEP 02</b>
+          <span>方案与报价</span>
+        </div>
+        <div class="step">
+          <b>STEP 03</b>
+          <span>建模设计</span>
+        </div>
+        <div class="step">
+          <b>STEP 04</b>
+          <span>打印试制</span>
+        </div>
+        <div class="step">
+          <b>STEP 05</b>
+          <span>修改迭代</span>
+        </div>
+        <div class="step">
+          <b>STEP 06</b>
+          <span>最终交付</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section white" aria-label="接单范围">
+      <div class="scope-grid">
+        <article class="scope">
+          <span class="section-kicker">适合承接</span>
+          <h3>需要快速变成实物的项目</h3>
+          <ul>
+            <li>创意产品、文创周边、展示道具</li>
+            <li>功能件、支架、收纳件、定制工具</li>
+            <li>旧零件复刻、停产零件替代件</li>
+            <li>小批量样件、结构验证件、外观验证件</li>
+          </ul>
+        </article>
+        <article class="scope warn">
+          <span class="section-kicker">暂不承接</span>
+          <h3>高风险或授权不清晰的项目</h3>
+          <ul>
+            <li>侵权模型、缺少合法授权的商业 IP 复制</li>
+            <li>医疗植入件、武器类零件</li>
+            <li>汽车关键安全件、高安全风险结构件</li>
+            <li>需求边界不清晰且无法确认用途的项目</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section about" aria-label="关于服务者">
+      <img class="profile" src="assets/profile-richard-qian.jpg" alt="钱林 Richard Qian 职业头像">
+      <div class="about-copy">
+        <span class="section-kicker">ABOUT</span>
+        <h2>工程经验，是这项服务的底座</h2>
+        <p>钱林 Richard Qian，拥有 20+ 年汽车零部件与工业产品开发经验，长期从事产品设计、工程验证、质量认可和量产落地工作。副业方向聚焦 3D 建模、3D 打印与产品化交付，优势不是只会打印，而是能从结构、装配、材料、成本、可制造性和后续迭代角度帮助客户把想法做实。</p>
+      </div>
+    </section>
+
+    <section class="section contact" id="contact">
+      <div>
+        <span class="section-kicker">CONTACT</span>
+        <h2>带着想法、照片或旧零件来聊</h2>
+        <p>可以先简单说明你想做什么、使用场景、期望尺寸、数量、预算和交付时间。如果已有草图、照片、旧零件或参考图，也可以一起发来。</p>
+      </div>
+      <div class="contact-box">
+        <span>邮箱</span>
+        <a class="contact-line" href="mailto:Richard_qianlin@163.com">Richard_qianlin@163.com</a>
+        <span class="contact-line">微信 / 电话：请替换为公开联系方式</span>
+        <a class="button primary" style="margin-top: 22px;" href="mailto:Richard_qianlin@163.com?subject=3D%E5%BB%BA%E6%A8%A1%E4%B8%8E%E6%89%93%E5%8D%B0%E5%AE%9A%E5%88%B6%E5%92%A8%E8%AF%A2">发送需求</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 小胖工作室 · 3D 建模与打印定制服务
+  </footer>
+</body>
+</html>
